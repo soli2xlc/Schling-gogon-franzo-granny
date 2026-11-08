@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="de"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Grammaire – Französisch Grammatik lernen</title>
+<style>
+:root{--bg:#f1f1ef;--card:#fff;--tx:#2b2d30;--ac:#e65100;--bl:#5b6066;--ok:#2a9d5c;--bd:#d3d3d0;--hi:#ffe6cc;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1d1e20;--card:#2a2c2f;--tx:#eeeeec;--bd:#45484c;--hi:#5a3a14;--ac:#ff8a2b}}
+:root[data-theme="dark"]{--bg:#1d1e20;--card:#2a2c2f;--tx:#eeeeec;--bd:#45484c;--hi:#5a3a14;--ac:#ff8a2b}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.55 system-ui,-apple-system,sans-serif}
+header{background:var(--bl);color:#fff;padding:14px 16px}h1{margin:0;font-size:1.3rem}h2{margin:.2em 0 .5em;font-size:1.2rem}
+nav{display:flex;gap:6px;padding:10px;overflow-x:auto}
+.btn{border:1px solid var(--bd);background:var(--card);color:var(--tx);padding:9px 14px;border-radius:20px;font-size:1rem;cursor:pointer;white-space:nowrap}
+.btn.on,.btn.p{background:var(--ac);color:#fff;border-color:var(--ac)}
+main{max-width:740px;margin:0 auto;padding:6px 14px 40px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:16px;margin:10px 0}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:8px 0}
+input[type=text]{font-size:1rem;padding:8px 10px;border-radius:8px;border:1px solid var(--bd);background:var(--card);color:var(--tx);width:100%}
+.opt{display:block;width:100%;text-align:left;margin:6px 0;white-space:normal}
+.ok{color:var(--ok);font-weight:600}.bad{color:var(--ac);font-weight:600}
+.box{background:var(--hi);border-radius:10px;padding:10px 12px;margin:10px 0}
+.tw{overflow-x:auto}table{border-collapse:collapse;width:100%}td,th{border:1px solid var(--bd);padding:6px 10px;text-align:left}th{background:var(--hi)}
+b.k{color:var(--ac)}small{opacity:.7}
+.bar{height:6px;background:var(--bd);border-radius:3px;overflow:hidden}.bar i{display:block;height:100%;background:var(--ok)}
+</style></head><body>
+<header><h1>🇫🇷 Grammaire – Découvertes Unité 1 &amp; 2</h1><small>Erst lesen, dann üben</small></header>
+<nav id="nav"></nav><main id="m"></main>
+<script>
+const $=s=>document.querySelector(s),m=$('#m');
+const sh=a=>[...a].sort(()=>Math.random()-.5);
+const tb=(h,rows)=>`<div class="tw"><table><tr>${h.map(x=>`<th>${x}</th>`).join('')}</tr>${rows.map(r=>`<tr>${r.map(x=>`<td>${x}</td>`).join('')}</tr>`).join('')}</table></div>`;
+const norm=s=>s.toLowerCase().replace(/[’`]/g,"'").replace(/\s+/g,' ').replace(/[.!?]+$/,'').trim();
+const strip=s=>norm(s).normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+
+// ---------- Erklärungen bei Fehlern ----------
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+const FORMS={ris:'je/tu',rit:'il/elle/on',rions:'nous',riez:'vous',rient:'ils/elles',crois:'je/tu',croit:'il/elle/on',croyons:'nous',croyez:'vous',croient:'ils/elles',ri:'das Partizip (Passé composé)',cru:'das Partizip (Passé composé)',rire:'den Infinitiv'};
+const WHY1={rire:'Nach «arrêter de» steht immer der Infinitiv.',ris:'Zu je und tu gehört -s: je ris, tu ris.',rit:'Zu il/elle/on gehört -t: il rit.',rient:'ils/elles bekommen -ent: ils rient.',rions:'nous: Stamm ri- + -ons → rions.',riez:'vous: Stamm ri- + -ez → riez.',ri:'Im Passé composé steht das Partizip ri (j\'ai ri).',crois:'Zu je und tu gehört crois (Stamm croi-).',croit:'Zu il/elle/on gehört croit.',croient:'ils/elles → croient (Stamm croi-, Endung -ent).',croyons:'Bei nous wechselt der Stamm zu croy-: nous croyons.',croyez:'Bei vous wechselt der Stamm zu croy-: vous croyez.',cru:'Das Partizip von croire ist cru (j\'ai cru).'};
+const END={ais:'je/tu → Endung -ais',ait:'il/elle/on → Endung -ait',ions:'nous → Endung -ions',iez:'vous → Endung -iez',aient:'ils/elles → Endung -aient'};
+function why(c,g){
+ const a=c.a[0],k=norm(a),G=norm(g||'');let r=c.e||'';
+ if(cur==0){const f=FORMS[G];if(f)r=`«${esc(g)}» ist die Form für ${f}. `+r;r+=WHY1[k]||''}
+ else if(cur==1&&!r){
+  if(G=='personne'&&k=='rien')r='«personne» heißt niemand. Hier geht es um eine Sache (quelque chose) → rien.';
+  else if(G=='rien'&&k=='personne')r='«rien» heißt nichts. Hier geht es um eine Person (quelqu\'un) → personne.';
+  else if(!a.includes(' ')){r=k=='rien'?'nichts = ne … rien. rien steht vor dem Partizip bzw. vor dem Infinitiv (je n\'ai rien oublié, je ne veux rien boire).':'niemand = ne … personne. personne steht nach dem Partizip bzw. Infinitiv (je n\'ai dansé avec personne).'}
+  else{if(!/\bn(e|')/.test(G))r+='Es fehlt ne bzw. n\' vor dem Verb. ';
+   ['rien','personne','que'].forEach(w=>{if(k.split(/[^a-zà-ÿ]+/).includes(w)&&!G.split(/[^a-zà-ÿ]+/).includes(w))r+=`Es fehlt «${w}». `});
+   if(/^(rien|personne)/.test(k))r+='Als Subjekt steht rien/personne am Satzanfang, danach kommt ne + Verb.'}}
+ else if(cur==2&&!r){
+  const e=k.match(/(aient|ais|ait|ions|iez)$/);
+  if(k=='étais'||k=='était')r='être ist unregelmäßig: Stamm ét- + Endung. ';
+  if(e)r+=(END[e[1]]||'')+'. ';
+  if(/ge(ais|ait|aient)$/.test(k))r+='Das e bleibt vor a, damit g wie [ʒ] klingt (mangeais). ';
+  if(/ç/.test(k))r+='ç vor a, damit c wie [s] klingt (commençais). ';
+  if(/(c|g)ions$|(c|g)iez$/.test(k)&&!/qu/.test(k))r+='Vor i genügt c bzw. g, kein e/ç nötig. ';
+  if(/qu(ait|iez|ais|aient|ions)$/.test(k))r+='Bei -quer bleibt qu erhalten. ';
+  r+='Stamm = nous-Form (Präsens) ohne -ons.'}
+ else if(!r)r='Beschreibung/Gewohnheit → Imparfait; einmalige Handlung → Passé composé.';
+ return r}
+// ---------- Übungs-Engine ----------
+function run(items,back){
+ let p=sh(items),i=0,sc=0,wrong=[];
+ function draw(){
+  if(i>=p.length){m.innerHTML=`<div class="card"><h2>Geschafft! ${sc}/${p.length}</h2>${wrong.length?'<p>Das solltest du nochmal anschauen:</p>'+wrong.map(w=>`<div class="box">${w.q}<br><b>${w.a[0]}</b>${w._w?'<br><small>'+w._w+'</small>':''}</div>`).join(''):'<p class="ok">Alles richtig – super!</p>'}<div class="row">${wrong.length?'<button class="btn p" id="rw">Fehler wiederholen</button>':''}<button class="btn" id="ag">Alles nochmal</button><button class="btn" id="bk">Zurück zur Regel</button></div></div>`;
+   if(wrong.length)$('#rw').onclick=()=>run(wrong,back);$('#ag').onclick=()=>run(items,back);$('#bk').onclick=back;return}
+  const c=p[i];
+  m.innerHTML=`<div class="card"><div class="bar"><i style="width:${i/p.length*100}%"></i></div><small>Aufgabe ${i+1}/${p.length}</small><p style="font-size:1.1rem">${c.q}</p>`+
+   (c.o?sh(c.o).map(o=>`<button class="btn opt">${o}</button>`).join(''):`<input type="text" id="t" autocomplete="off" autocapitalize="off" autocorrect="off" placeholder="Antwort eintippen"><div class="row"><button class="btn p" id="ck">Prüfen</button></div>`)+
+   `<div id="f"></div></div>`;
+  let done=false;
+  const fin=(ok,g)=>{if(done)return;done=true;const w=ok?'':why(c,g);if(ok)sc++;else{wrong.push(c);c._w=w}
+   $('#f').innerHTML=(ok?'<p class="ok">Richtig!</p>'+(c.e?`<div class="box">${c.e}</div>`:''):`<p class="bad">Falsch.${g?` Deine Antwort: «${esc(g)}».`:''} Richtig wäre: ${c.a[0]}</p>`+(w?`<div class="box">💡 Warum? ${w}</div>`:''))+'<button class="btn p" id="x">Weiter</button>';
+   $('#x').onclick=()=>{i++;draw()};$('#x').focus()};
+  if(c.o)m.querySelectorAll('.opt').forEach(b=>b.onclick=()=>fin(b.textContent==c.a[0],b.textContent));
+  else{const chk=()=>{const v=$('#t').value;if(!v.trim())return;const ok=c.a.some(a=>norm(a)==norm(v));
+    const near=!ok&&c.a.some(a=>strip(a)==strip(v));
+    if(near){$('#f').innerHTML='<p class="bad">Fast! Achte auf die Akzente.</p>';return}
+    fin(ok,v)};$('#ck').onclick=chk;$('#t').onkeydown=e=>{if(e.key=="Enter"){done?$('#x').click():chk()}};$('#t').focus()}
+ }
+ draw()}
+
+// ---------- Themen ----------
+const T=[];
+T.push({n:"rire & croire",
+ theory:()=>`<div class="card"><h2>Die Verben <i>rire</i> und <i>croire</i></h2><p>Beide sind unregelmäßig. Im Singular klingen alle Formen gleich (<b>ris, ris, rit</b> / <b>crois, crois, croit</b>).</p>
+ ${tb(["","rire (lachen)","croire (glauben)"],[["je","ris","crois"],["tu","ris","crois"],["il/elle/on","rit","croit"],["nous","rions","croyons"],["vous","riez","croyez"],["ils/elles","rient","croient"]])}
+ <p><b>Imperativ:</b> Ris! Rions! Riez! – Crois! Croyons! Croyez!<br><b>Passé composé:</b> j'ai <b class="k">ri</b> – j'ai <b class="k">cru</b></p>
+ <div class="box">💡 Bei <i>croire</i> wechselt der Stamm: <b>croi-</b> (je, tu, il, ils) aber <b>croy-</b> (nous, vous).</div></div>`,
+ ex:[
+ {q:"Les filles n'arrêtent pas de ___ . (rire)",a:["rire"]},{q:"Les garçons ___ aussi. (rire)",a:["rient"]},{q:"Mais Clément ne ___ pas. (rire)",a:["rit"]},
+ {q:"Tu ___ comme un fou. (rire)",a:["ris"]},{q:"Nous ___ beaucoup en cours. (rire)",a:["rions"]},{q:"Vous ___ de moi? (rire)",a:["riez"]},
+ {q:"Hier, j'ai ___ pendant le cours. (rire)",a:["ri"]},
+ {q:"Tu ___ qu'il va prendre des cours de guitare? (croire)",a:["crois"]},{q:"Alex et Lucie ___ qu'il va créer un groupe. (croire)",a:["croient"]},
+ {q:"Et vous, qu'est-ce que vous ___ ? (croire)",a:["croyez"]},{q:"Nous ne ___ pas cette histoire. (croire)",a:["croyons"]},{q:"Bachir ne ___ pas qu'il va faire de la musique. (croire)",a:["croit"]},
+ {q:"Je n'ai pas ___ ça. (croire, Passé composé)",a:["cru"]}]});
+T.push({n:"Verneinung",
+ theory:()=>`<div class="card"><h2>ne … rien · ne … personne</h2>
+ ${tb(["Französisch","Deutsch","Beispiel"],[["ne … rien","nichts","Je ne vois <b class=k>rien</b>."],["ne … personne","niemand","Je ne vois <b class=k>personne</b>."],["ne … jamais","nie","Je ne ris <b class=k>jamais</b>."],["ne … plus","nicht mehr","Je ne le crois <b class=k>plus</b>."],["ne … que","nur","Il ne fait <b class=k>que</b> rire."]])}
+ <p><b>Passé composé:</b> <i>ne</i> + Hilfsverb + <i>pas/rien/jamais</i> + Partizip.<br>Je n'ai <b>rien</b> vu. – Aber: <i>personne</i> steht <b>nach</b> dem Partizip: Je n'ai vu <b>personne</b>.</p>
+ <div class="box">⚠️ <i>ne … rien</i> umklammert nur das konjugierte Verb (wie <i>ne … pas</i>). <i>ne … personne</i> umklammert die ganze Verbgruppe.</div>
+ <h2>rien / personne als Subjekt</h2><p><b>Rien</b> n'est perdu. <b>Personne</b> ne m'aide. → hier steht <i>rien/personne</i> <b>vorn</b>, dann <i>ne</i> + Verb.<br>Ça ne fait <u>rien</u> (Objekt) ↔ <u>Rien</u> n'est perdu (Subjekt).</p></div>`,
+ ex:[
+ {q:"Tu rêves de quelqu'un? – Non, je ne rêve de ___ .",a:["personne"]},{q:"Tu as dansé avec quelqu'un? – Non, je n'ai dansé avec ___ .",a:["personne"]},
+ {q:"Tu veux boire quelque chose? – Non, je ne veux ___ boire.",a:["rien"],e:"rien steht vor dem Infinitiv."},
+ {q:"Tu as oublié quelque chose? – Non, je n'ai ___ oublié.",a:["rien"],e:"rien steht vor dem Partizip."},
+ {q:"Tu veux appeler quelqu'un? – Non, je ne veux appeler ___ .",a:["personne"],e:"personne steht nach dem Infinitiv."},
+ {q:"Nichts gefällt ihr.",a:["Rien ne lui plaît."]},{q:"Niemand versteht sie.",a:["Personne ne la comprend."]},
+ {q:"Niemand weiß, wo sie ist.",a:["Personne ne sait où elle est."]},{q:"Nichts ist verloren.",a:["Rien n'est perdu."]},
+ {q:"Nichts interessiert mich.",a:["Rien ne m'intéresse."]},{q:"Niemand weiß es.",a:["Personne ne le sait."]},
+ {q:"Wie sagt man «Da ist nichts mehr»? Il y a …",o:["Il n'y a plus rien.","Il n'y a rien plus.","Il y a plus rien ne."],a:["Il n'y a plus rien."],e:"Bei ne … plus rien stehen beide Wörter hinter dem Verb, und zwar plus vor rien."},
+ {q:"Ne ___ que (nur): «Fais seulement des bonnes choses!» →",a:["Ne fais que des bonnes choses!"],e:"ne … que (nur) umklammert das Verb; que steht direkt vor dem, worauf sich «nur» bezieht (des bonnes choses)."},
+ {q:"Personne ___ me comprend. Welches Wort fehlt?",o:["ne","n'est pas","pas"],a:["ne"],e:"Personne ist hier Subjekt (niemand). Dann steht personne vorn und ne direkt vor dem Verb: Personne ne me comprend."}]});
+T.push({n:"Imparfait",
+ theory:()=>`<div class="card"><h2>Das Imparfait</h2><p><b>Bildung:</b> <i>nous</i>-Form (Präsens) ohne <i>-ons</i> + Endung.<br>nous parl<s>ons</s> → <b>parl-</b> &nbsp;·&nbsp; nous fais<s>ons</s> → <b>fais-</b></p>
+ ${tb(["","Endung","parler","finir"],[["je","-ais","parlais","finissais"],["tu","-ais","parlais","finissais"],["il/elle/on","-ait","parlait","finissait"],["nous","-ions","parlions","finissions"],["vous","-iez","parliez","finissiez"],["ils/elles","-aient","parlaient","finissaient"]])}
+ <div class="box">Ausnahme: <b>être</b> → j'<b>ét</b>ais, tu étais, il était, nous étions …</div>
+ <h2>Besonderheiten: -ger / -cer</h2><p>Damit die Aussprache gleich bleibt:</p>
+ ${tb(["Laut","Schreibung","Beispiel"],[["[ʒ]","<b>ge</b> vor a/o","il encourage<b class=k>ait</b>, je mange<b class=k>ais</b>, ils mange<b class=k>aient</b>"],["","<b>g</b> vor i","nous mangions, vous mangiez"],["[s]","<b>ç</b> vor a/o","je commen<b class=k>ç</b>ais, elle lan<b class=k>ç</b>ait, ils lan<b class=k>ç</b>aient"],["","<b>c</b> vor i","nous commencions, vous commenciez"]])}
+ <p>Bei <b>-quer / -guer</b> bleibt das u: elle cliquait, vous expliquiez.</p></div>`,
+ ex:[
+ {q:"parler → tu ___",a:["parlais"]},{q:"finir → ils ___",a:["finissaient"]},{q:"faire → nous ___",a:["faisions"]},{q:"être → il ___",a:["était"]},{q:"être → j'___",a:["étais"]},
+ {q:"avoir → vous ___",a:["aviez"]},{q:"manger → je ___",a:["mangeais"]},{q:"manger → nous ___",a:["mangions"]},{q:"encourager → il ___",a:["encourageait"]},
+ {q:"commencer → je ___",a:["commençais"]},{q:"commencer → nous ___",a:["commencions"]},{q:"lancer → elles ___",a:["lançaient"]},{q:"cliquer → elle ___",a:["cliquait"]},{q:"expliquer → vous ___",a:["expliquiez"]},
+ {q:"déménager → ils ___",a:["déménageaient"]}]});
+T.push({n:"Passé composé / Imparfait",
+ theory:()=>`<div class="card"><h2>Welche Vergangenheit?</h2>
+ ${tb(["","Imparfait","Passé composé"],[["Verwendung","Beschreibung von Zuständen, Gewohnheiten, Situationen","einmalige, neu einsetzende oder aufeinanderfolgende Handlungen"],["Leitfrage","Was war (schon)? Was war noch?","Was geschah (dann)?"],["Beispiel","C'était la fin du cours …","… Mais personne n'a bougé."]])}
+ <div class="box">Signalwörter: <b>Imparfait</b> – d'habitude, toujours, souvent, chaque jour, pendant que · <b>Passé composé</b> – soudain, tout à coup, un jour, puis, ensuite, hier</div>
+ <p><b>Passé composé</b> = <i>avoir/être</i> (Präsens) + Partizip: il a bougé, elle est venue. Das Partizip von <i>rire</i> = ri, <i>croire</i> = cru.</p></div>`,
+ ex:[
+ {q:"C'___ la fin du cours quand la cloche a sonné. (être)",o:["était","a été"],a:["était"],e:"Zustand/Hintergrund → Imparfait."},
+ {q:"Tout à coup, son regard ___ sur quelque chose. (bloquer)",o:["a bloqué","bloquait"],a:["a bloqué"],e:"tout à coup + einmalige Handlung → Passé composé."},
+ {q:"Le prof ___ toujours content de venir en classe. (être)",o:["était","a été"],a:["était"],e:"toujours → Gewohnheit → Imparfait."},
+ {q:"Mais personne ___ . (bouger)",o:["a bougé","bougeait"],a:["a bougé"],e:"Einzelne Handlung → Passé composé."},
+ {q:"Il portait des dreadlocks. Er ___ aussi des CD. (avoir)",o:["avait","a eu"],a:["avait"],e:"Beschreibung → Imparfait."},
+ {q:"Hier, Lucie ___ un cadeau. (recevoir)",o:["a reçu","recevait"],a:["a reçu"],e:"hier + einmalig → Passé composé."},
+ {q:"Quand j'___ petit, je jouais au foot chaque jour. (être)",o:["étais","ai été"],a:["étais"],e:"«chaque jour» und «jouais» zeigen eine Gewohnheit in der Vergangenheit → Imparfait."},
+ {q:"Soudain, il ___ à fouiller partout. (se mettre)",o:["s'est mis","se mettait"],a:["s'est mis"],e:"«Soudain» signalisiert eine plötzliche, einmalige Handlung → Passé composé."},
+ {q:"Pendant que le prof expliquait, les élèves ___ . (dessiner)",o:["dessinaient","ont dessiné"],a:["dessinaient"],e:"pendant que + gleichzeitig Verlaufendes → Imparfait."},
+ {q:"Un jour, Mikaleff ___ des statuettes de ses voyages. (rapporter)",o:["a rapporté","rapportait"],a:["a rapporté"],e:"«Un jour» nennt einen einmaligen Zeitpunkt → Passé composé."}]});
+
+// ---------- UI ----------
+let cur=0;
+$('#nav').innerHTML=T.map((t,i)=>`<button class="btn" data-i="${i}">${t.n}</button>`).join('');
+$('#nav').onclick=e=>{if(e.target.dataset.i!=null){cur=+e.target.dataset.i;show()}};
+function show(){
+ [...$('#nav').children].forEach((b,i)=>b.classList.toggle('on',i==cur));
+ const t=T[cur];m.innerHTML=t.theory()+`<div class="row"><button class="btn p" id="go">Jetzt üben (${t.ex.length} Aufgaben)</button></div>`;
+ $('#go').onclick=()=>run(t.ex,show);window.scrollTo(0,0)}
+show();
+</script></body></html>
